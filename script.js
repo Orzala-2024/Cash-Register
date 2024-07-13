@@ -57,7 +57,7 @@ const checkRegister = () => {
     'QUARTER', 'DIME', 'NICKEL', 'PENNY',
   ];
   const changeArr = [];
-  const cidCopy = [...cid];
+  const cidCopy = JSON.parse(JSON.stringify(cid));
 
   for (let i = 0; i < denominations.length; i += 1) {
     let totalDenom = 0;
@@ -65,6 +65,7 @@ const checkRegister = () => {
       cidCopy[cidCopy.length - 1 - i][1] -= denominations[i];
       change -= denominations[i];
       totalDenom += denominations[i];
+      change = Number(change.toFixed(2));
     }
 
     if (totalDenom > 0) {
@@ -79,8 +80,8 @@ const checkRegister = () => {
 
   const remainingCid = cidCopy.reduce((total, sum) => total + sum[1], 0);
   if (remainingCid === 0) {
-    displayChangeDue.innerHTML = `Status: CLOSED ${changeArr
-      .map((cash) => `${cash[0]}: $${cash[1].toFixed(2)}`)
+    displayChangeDue.innerHTML = `Status: CLOSED <br><br>${changeArr
+      .map((cash) => `<b>${cash[0]}</b>: $${cash[1].toFixed(2)} <br>`)
       .join(' ')}`;
     cid = cid.map((denom) => [denom[0], 0]);
   } else {
